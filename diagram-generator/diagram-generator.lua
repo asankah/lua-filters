@@ -310,6 +310,7 @@ function CodeBlock(block)
         graphviz = graphviz,
         tikz = tikz2image,
         py2image = py2image,
+        matplotlib = py2image,
         asymptote = asymptote,
     }
 
