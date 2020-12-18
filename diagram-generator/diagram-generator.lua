@@ -314,6 +314,18 @@ function CodeBlock(block)
         asymptote = asymptote,
     }
 
+    -- If there's a 'src' attribute, then the contents of that attribute as the
+    -- path to an external source file. Content of the CodeBlock is ignored.
+    local contents = nil
+    local external_src = block.attr.attributes["src"]
+    if external_src then
+            local r = io.open(external_src, "rb")
+            contents = r:read("a")
+            r:close()
+    else
+            contents = block.text
+    end
+
     -- Check if a converter exists for this block. If not, return the block
     -- unchanged.
     local img_converter = converters[block.classes[1]]
@@ -322,7 +334,7 @@ function CodeBlock(block)
     end
 
     -- Call the correct converter which belongs to the used class:
-    local success, img = pcall(img_converter, block.text,
+    local success, img = pcall(img_converter, contents,
         filetype, block.attributes["additionalPackages"] or nil)
 
     -- Was ok?
